@@ -6,21 +6,22 @@
 /*******************************************************/
 // setup()
 /*******************************************************/
+function scoreUp() {
+		roomScore +=1
+		console.log("room cleared!!")
+} 
+
 function setup() {
 	console.log("setup: ");
 	cnv = new Canvas(1100, 900);
 
 	//player
-	playerSprite = new Sprite(width/2,height/2,50);
+	playerSprite = new Sprite(width/2, 800, 50);
 	playerSprite.color = 'blue'
 
 	roomScore = 0
 
 	//let roomType = 0
-	function scoreUp() {
-			roomScore +=1
-			console.log("room cleared!!")
-	} 
 
 	//door
 	exitDoor = new Sprite(width / 2, 0, 100, 20, 's');
@@ -43,6 +44,7 @@ function setup() {
 function draw() {
 	background('ccc');
 
+	text("rooms cleared: " +roomScore, 50, 50)
 	/*
 	if (roomType = 1){
 		background('ccc');
@@ -65,25 +67,28 @@ function draw() {
 	//sprite.moveTowards(mouseX, mouseY, 10);
 
 	// movement
-	if (kb.pressing('left')) {
+	if (kb.pressing('a')) {
 		playerSprite.vel.x = -4;
-	} else if (kb.pressing('right')){
+	} else if (kb.pressing('d')){
 		playerSprite.vel.x = 4;
 	} else {
 		playerSprite.vel.x = 0;
 	}
 
-	if (kb.pressing('up')){
+	if (kb.pressing('w')){
 		playerSprite.vel.y = -4;
-	} else if (kb.pressing('down')){
+	} else if (kb.pressing('s')){
         playerSprite.vel.y = 4;
     } else {
 		playerSprite.vel.y = 0;
 	}
 
-	playerSprite.collided(exitDoor, scoreUp())
-
-	//text("Rooms Cleared: " +score, 50, 50);
+	// door
+	if (playerSprite.collided(exitDoor)) {
+		scoreUp()
+		playerSprite.moveTo(width/2, 800, 10000);
+		setTimeout(60)
+	}
 }
 
 /*******************************************************/
