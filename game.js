@@ -6,11 +6,6 @@
 /*******************************************************/
 // setup()
 /*******************************************************/
-function scoreUp() {
-		roomScore +=1
-		console.log("room cleared!!")
-} 
-
 function setup() {
 	console.log("setup: ");
 	cnv = new Canvas(1100, 900);
@@ -18,6 +13,12 @@ function setup() {
 	//player
 	playerSprite = new Sprite(width/2, 800, 50);
 	playerSprite.color = 'blue'
+
+	gunSprite = new Sprite(playerSprite.x, playerSprite.y, 20, 20, 'n');
+	gunSprite.color ='green'
+
+	bulletSprite = new Sprite(playerSprite.x, playerSprite.y, 10, 'n')
+	bulletSprite.color = 'red'
 
 	roomScore = 0
 
@@ -37,6 +38,13 @@ function setup() {
 	wallBottom = new Sprite(width / 2, height, width, 8, 'k');
 	wallBottom.color = 'black'
 }
+
+function scoreUp() {
+		roomScore +=1
+		console.log("room cleared!!")
+} 
+
+
 	
 /*******************************************************/
 // draw()
@@ -83,11 +91,21 @@ function draw() {
 		playerSprite.vel.y = 0;
 	}
 
+	// gun
+	gunSprite.moveTowards(playerSprite.x, playerSprite.y, 1);
+	gunSprite.rotateTowards(mouseX, mouseY, 1);
+	if (kb.pressed('space')) {
+		bulletSprite.rotateTowards(mouseX, mouseY, 1);
+		bulletSprite.moveTo(mouseX, mouseY, 20);
+	} else {
+		//bulletSprite.moveTowards(playerSprite.x, playerSprite.y, 1);
+	}
+
 	// door
 	if (playerSprite.collided(exitDoor)) {
 		scoreUp()
 		playerSprite.moveTo(width/2, 800, 10000);
-		setTimeout(60)
+		setTimeout(100)
 	}
 }
 
