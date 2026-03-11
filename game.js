@@ -39,13 +39,15 @@ function setup() {
 
 	//let roomType = 0
 
+	wallGroup = new Group();
+
 	//door
 	exitDoor = new Sprite(width / 2, 0, 100, 20, 's');
 	exitDoor.color = 'orange'
 
-	//walls
+	wallGroup.add(exitDoor);
 
-	wallGroup = new Group();
+	//walls
 
 	wallLeft = new Sprite(0, height / 2, 8, height, 'k');
 	wallLeft.color = 'black';
@@ -73,6 +75,8 @@ function scoreUp() {
 		roomScore +=1
 		console.log("room cleared!!")
 } 
+
+bulletAngle = 0
 
 
 	
@@ -122,24 +126,24 @@ function draw() {
 	}
 
 	// gun
+
 	gunSprite.moveTowards(playerSprite.x, playerSprite.y, 1);
 	gunSprite.rotateTowards(mouseX, mouseY, 1);
 	if (kb.pressed('space')) {
 		
 		bulletSprite = new Sprite(playerSprite.x, playerSprite.y, 10);
 		
-		bulletSprite.moveTo(mouseX, mouseY, 50);
+		bulletSprite.angleTo()
 
 		bulletGroup.add(bulletSprite);
 
-	} else {
+	}
 		//bulletSprite.moveTowards(playerSprite.x, playerSprite.y, 1);
 
 	bulletGroup.collides(wallGroup, func2Call)
 
 		function func2Call(bulletSprite, wallGroup) {
 		console.log("bullet colided")
-		// Delete the alien which was hit
 		bulletSprite.remove();
 	}
 
