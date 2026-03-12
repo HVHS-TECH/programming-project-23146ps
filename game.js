@@ -11,11 +11,13 @@ function setup() {
 	cnv = new Canvas(1100, 900);
 
 	//player
-	playerSprite = new Sprite(width/2, 800, 50);
+	playerSprite = new Sprite(width/2, height - 100, 40, 'k');
 	playerSprite.color = 'blue'
+	playerSprite.layer = 2;
 
 	gunSprite = new Sprite(playerSprite.x, playerSprite.y, 20, 20, 'n');
 	gunSprite.color ='green'
+	gunSprite.layer = 3;
 
 	//bulletSprite = new Sprite(playerSprite.x, playerSprite.y, 10, 'n')
 	//bulletSprite.color = 'red'
@@ -49,25 +51,26 @@ function setup() {
 
 	//walls
 
-	wallLeft = new Sprite(0, height / 2, 8, height, 'k');
+	wallLeft = new Sprite(0, height / 2, 8, height, 's');
 	wallLeft.color = 'black';
 
 	wallGroup.add(wallLeft);
 
-	wallRight = new Sprite(width, height / 2, 8, height, 'k');
+	wallRight = new Sprite(width, height / 2, 8, height, 's');
 	wallRight.color = 'black'
 
 	wallGroup.add(wallRight);
 
-	wallTop = new Sprite(width / 2, 0, width, 8, 'k');
+	wallTop = new Sprite(width / 2, 0, width, 8, 's');
 	wallTop.color = 'black'
 
 	wallGroup.add(wallTop);
 
-	wallBottom = new Sprite(width / 2, height, width, 8, 'k');
+	wallBottom = new Sprite(width / 2, height, width, 8, 's');
 	wallBottom.color = 'black'
 
 	wallGroup.add(wallBottom);
+	wallGroup.layer = 2;
 
 }
 
@@ -128,20 +131,28 @@ function draw() {
 	// gun
 
 	gunSprite.moveTowards(playerSprite.x, playerSprite.y, 1);
-	gunSprite.rotateTowards(mouseX, mouseY, 1);
+	//gunSprite.rotateTowards(mouseX, mouseY, 1);
+
 	if (kb.pressed('space')) {
 		
 		bulletSprite = new Sprite(playerSprite.x, playerSprite.y, 10);
-		
-		bulletSprite.angleTo()
 
-		bulletGroup.add(bulletSprite);
+		bulletSprite.layer = 1;
+		
+		//bulletDirection = playerSprite.angleTo(mouse)
+
+		bulletSprite.direction = playerSprite.angleTo(mouseX, mouseY)
+
+		bulletSprite.speed = 10;
+
+		//bulletGroup.add(bulletSprite);
 
 	}
 		//bulletSprite.moveTowards(playerSprite.x, playerSprite.y, 1);
 
-	bulletGroup.collides(wallGroup, func2Call)
+	if (wallGroup.overlaps(bulletGroup, func2Call)) {
 
+	}
 		function func2Call(bulletSprite, wallGroup) {
 		console.log("bullet colided")
 		bulletSprite.remove();
@@ -150,7 +161,7 @@ function draw() {
 	// door
 	if (playerSprite.collided(exitDoor)) {
 		scoreUp()
-		playerSprite.moveTo(width/2, 800, 10000);
+		playerSprite.move(width/2, height - 100, 10000);
 		setTimeout(1000)
 	}
 }
