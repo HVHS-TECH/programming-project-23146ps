@@ -11,8 +11,13 @@ function setup() {
 	cnv = new Canvas(1100, 900);
 
 	//player
-	playerSprite = new Sprite(width/2, height - 100, 1, 'd');
+	playerSprite = new Sprite(width/2, height - 100, 40, 'd');
 	playerSprite.color = 'blue'
+
+	targetGroup = new Group();
+	for (let i = 0; i < 80; i++) { 
+		targets = new Sprite(random(500), random(200), 20, 20);
+	}
 
 	gunSprite = new Sprite(playerSprite.x, playerSprite.y, 20, 20, 'n');
 	gunSprite.color ='green'
@@ -20,7 +25,7 @@ function setup() {
 	//bulletSprite = new Sprite(playerSprite.x, playerSprite.y, 10, 'n')
 	//bulletSprite.color = 'red'
 
-	bulletGroup = new Group();
+	//bulletGroup = new Group();
 
 	/*
 	for (i = 0; i < 40; i++) {
@@ -87,6 +92,21 @@ function draw() {
 	background('ccc');
 
 	text("rooms cleared: " +roomScore, 50, 50)
+
+	rayCastDirection = playerSprite.angleTo(mouseX, mouseY)
+
+	/*
+	targets.color = color(120);
+
+	let sprites = world.rayCast(playerSprite, rayCastDirection, 5000);
+
+	for (let s of sprites) s.color = 'orange';
+
+	stroke('orange');
+	line(playerSprite.x, playerSprite.y, mouse.x, mouse.y);
+	noStroke();
+	*/
+
 	/*
 	if (roomType = 1){
 		background('ccc');
@@ -131,7 +151,17 @@ function draw() {
 	//gunSprite.moveTowards(mouseX, mouseY, 60);
 
 	if (kb.pressed('space')) {
-		
+
+
+		let sprites = world.rayCast(playerSprite, rayCastDirection, 5000);
+
+		for (let s of targetGroup) s.delete()
+
+		stroke('orange');
+		line(playerSprite.x, playerSprite.y, mouse.x, mouse.y);
+		noStroke();
+
+		/*
 		bulletSprite = new Sprite(gunSprite.x, gunSprite.y, 10);
 
 		bulletSprite.direction = playerSprite.angleTo(mouseX, mouseY)
@@ -139,10 +169,10 @@ function draw() {
 		bulletSprite.speed = 10;
 
 		bulletGroup.add(bulletSprite);
-
+		*/
 	}
 		//bulletSprite.moveTowards(playerSprite.x, playerSprite.y, 1);
-
+		/*
 	if (bulletGroup.collides(wallGroup, func2Call)) {
 
 	}
@@ -150,7 +180,7 @@ function draw() {
 		console.log("bullet colided")
 		bulletSprite.remove();
 	}
-
+	*/
 	// door
 	if (playerSprite.collided(exitDoor)) {
 		scoreUp()
