@@ -11,13 +11,11 @@ function setup() {
 	cnv = new Canvas(1100, 900);
 
 	//player
-	playerSprite = new Sprite(width/2, height - 100, 40, 'k');
+	playerSprite = new Sprite(width/2, height - 100, 1, 'd');
 	playerSprite.color = 'blue'
-	playerSprite.layer = 2;
 
 	gunSprite = new Sprite(playerSprite.x, playerSprite.y, 20, 20, 'n');
 	gunSprite.color ='green'
-	gunSprite.layer = 3;
 
 	//bulletSprite = new Sprite(playerSprite.x, playerSprite.y, 10, 'n')
 	//bulletSprite.color = 'red'
@@ -70,7 +68,6 @@ function setup() {
 	wallBottom.color = 'black'
 
 	wallGroup.add(wallBottom);
-	wallGroup.layer = 2;
 
 }
 
@@ -131,26 +128,22 @@ function draw() {
 	// gun
 
 	gunSprite.moveTowards(playerSprite.x, playerSprite.y, 1);
-	//gunSprite.rotateTowards(mouseX, mouseY, 1);
+	//gunSprite.moveTowards(mouseX, mouseY, 60);
 
 	if (kb.pressed('space')) {
 		
-		bulletSprite = new Sprite(playerSprite.x, playerSprite.y, 10);
-
-		bulletSprite.layer = 1;
-		
-		//bulletDirection = playerSprite.angleTo(mouse)
+		bulletSprite = new Sprite(gunSprite.x, gunSprite.y, 10);
 
 		bulletSprite.direction = playerSprite.angleTo(mouseX, mouseY)
 
 		bulletSprite.speed = 10;
 
-		//bulletGroup.add(bulletSprite);
+		bulletGroup.add(bulletSprite);
 
 	}
 		//bulletSprite.moveTowards(playerSprite.x, playerSprite.y, 1);
 
-	if (wallGroup.overlaps(bulletGroup, func2Call)) {
+	if (bulletGroup.collides(wallGroup, func2Call)) {
 
 	}
 		function func2Call(bulletSprite, wallGroup) {
