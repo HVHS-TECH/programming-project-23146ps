@@ -16,7 +16,8 @@ function setup() {
 
 	targetGroup = new Group();
 	for (let i = 0; i < 80; i++) { 
-		targets = new Sprite(random(500), random(200), 20, 20);
+		targetSprite = new Sprite(random(500), random(200), 20, 20);
+		targetGroup.add(targetSprite)
 	}
 
 	gunSprite = new Sprite(playerSprite.x, playerSprite.y, 20, 20, 'n');
@@ -25,20 +26,7 @@ function setup() {
 	//bulletSprite = new Sprite(playerSprite.x, playerSprite.y, 10, 'n')
 	//bulletSprite.color = 'red'
 
-	//bulletGroup = new Group();
-
-	/*
-	for (i = 0; i < 40; i++) {
-		
-		bulletSprite = new Sprite(playerSprite.x, playerSprite.y, 10);
-		
-		bulletSprite.vel.x = randNum = random(2, 8);
-		
-		bulletSprite.vel.y = randNum = random(2, 8);
-		
-		bulletGroup.add(bulletSprite);
-	}
-	*/
+	bulletGroup = new Group();
 
 	roomScore = 0
 
@@ -128,7 +116,9 @@ function draw() {
 
 	//sprite.moveTowards(mouseX, mouseY, 10);
 
-	// movement
+	/*******************************************************/
+	// player movement
+	/*******************************************************/
 	if (kb.pressing('a')) {
 		playerSprite.vel.x = -4;
 	} else if (kb.pressing('d')){
@@ -151,36 +141,46 @@ function draw() {
 	//gunSprite.moveTowards(mouseX, mouseY, 60);
 
 	if (kb.pressed('space')) {
+		
+		/*
+		let hitTarget = world.rayCast(playerSprite, rayCastDirection, 5000);
 
-
-		let sprites = world.rayCast(playerSprite, rayCastDirection, 5000);
-
-		for (let s of targetGroup) s.delete()
+		if(hitTarget) {
+			console.log("target hit 1")
+			if(hitTarget.name = 'targets'){
+				console.log("target hit 2");
+				targets.delete()
+			}
+		}
 
 		stroke('orange');
 		line(playerSprite.x, playerSprite.y, mouse.x, mouse.y);
 		noStroke();
 
-		/*
-		bulletSprite = new Sprite(gunSprite.x, gunSprite.y, 10);
+		*/
+		bulletSprite = new Sprite(gunSprite.x, gunSprite.y, 10, 'n');
 
 		bulletSprite.direction = playerSprite.angleTo(mouseX, mouseY)
 
-		bulletSprite.speed = 10;
+		bulletSprite.speed = 15;
 
 		bulletGroup.add(bulletSprite);
-		*/
-	}
-		//bulletSprite.moveTowards(playerSprite.x, playerSprite.y, 1);
-		/*
-	if (bulletGroup.collides(wallGroup, func2Call)) {
 
 	}
+		//bulletSprite.moveTowards(playerSprite.x, playerSprite.y, 1);
+	if (bulletGroup.overlaps(wallGroup, func2Call)) {}
+	if (bulletGroup.overlaps(targetGroup, murder)) {}
+
 		function func2Call(bulletSprite, wallGroup) {
 		console.log("bullet colided")
 		bulletSprite.remove();
 	}
-	*/
+
+	function murder(bulletSprite, targetSprite){
+		console.log("kill")
+		bulletSprite.remove()
+		targetSprite.remove()
+	}
 	// door
 	if (playerSprite.collided(exitDoor)) {
 		scoreUp()
