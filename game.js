@@ -35,12 +35,14 @@ function setup() {
 	wallGroup = new Group();
 
 	//door
-	exitDoor = new Sprite(width / 2, 0, 100, 20, 's');
+	exitDoor = new Sprite(width / 2, 0, 100, 30, 'n');
 	exitDoor.color = 'orange'
 
 	wallGroup.add(exitDoor);
 
 	//walls
+
+	roomType = 1
 
 	wallLeft = new Sprite(0, height / 2, 8, height, 's');
 	wallLeft.color = 'black';
@@ -140,24 +142,8 @@ function draw() {
 	gunSprite.moveTowards(playerSprite.x, playerSprite.y, 1);
 	//gunSprite.moveTowards(mouseX, mouseY, 60);
 
-	if (kb.pressed('space')) {
+	if (kb.pressing('space')) {
 		
-		/*
-		let hitTarget = world.rayCast(playerSprite, rayCastDirection, 5000);
-
-		if(hitTarget) {
-			console.log("target hit 1")
-			if(hitTarget.name = 'targets'){
-				console.log("target hit 2");
-				targets.delete()
-			}
-		}
-
-		stroke('orange');
-		line(playerSprite.x, playerSprite.y, mouse.x, mouse.y);
-		noStroke();
-
-		*/
 		bulletSprite = new Sprite(gunSprite.x, gunSprite.y, 10, 'n');
 
 		bulletSprite.direction = playerSprite.angleTo(mouseX, mouseY)
@@ -181,10 +167,24 @@ function draw() {
 		bulletSprite.remove()
 		targetSprite.remove()
 	}
+
+
 	// door
-	if (playerSprite.collided(exitDoor)) {
+	if (playerSprite.overlaps(exitDoor)) {
 		scoreUp()
-		playerSprite.move(width/2, height - 100, 10000);
+		playerSprite.moveTo(550, 850, 10000);
+
+		if (roomType = 1) {
+			background('ccc');
+			roomOne()
+			//roomType = random(2, 3)
+		}
+
+		function roomOne() {
+			wallCenter = new Sprite(width / 2, height / 2, 400, 50, 's');
+		}
+
+
 		setTimeout(1000)
 	}
 }
