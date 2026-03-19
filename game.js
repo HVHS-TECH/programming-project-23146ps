@@ -142,7 +142,7 @@ function draw() {
 	gunSprite.moveTowards(playerSprite.x, playerSprite.y, 1);
 	//gunSprite.moveTowards(mouseX, mouseY, 60);
 
-	if (kb.pressing('space')) {
+	if (kb.pressed('space')) {
 		
 		bulletSprite = new Sprite(gunSprite.x, gunSprite.y, 10, 'n');
 
@@ -174,6 +174,9 @@ function draw() {
 		scoreUp()
 		playerSprite.moveTo(550, 850, 10000);
 
+		targetGroup.visible = false
+		targetGroup.physicsType = none
+
 		if (roomType = 1) {
 			background('ccc');
 			roomOne()
@@ -182,8 +185,8 @@ function draw() {
 
 		function roomOne() {
 			wallCenter = new Sprite(width / 2, height / 2, 400, 50, 's');
+			wallGroup.add(wallCenter);
 		}
-
 
 		setTimeout(1000)
 	}
