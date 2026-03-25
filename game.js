@@ -13,12 +13,22 @@ function setup() {
 	//player
 	playerSprite = new Sprite(width / 2, height - 100, 40, 'd');
 	playerSprite.color = 'blue'
+	
 
 	targetGroup = new Group();
+
+
+
+	/*******************************************************/
+	// FOR LOOP START
 	for (let i = 0; i < 80; i++) {
 		targetSprite = new Sprite(random(500), random(200), 20, 20);
 		targetGroup.add(targetSprite)
 	}
+	// FOR LOOP END
+	/*******************************************************/
+
+
 
 	gunSprite = new Sprite(playerSprite.x, playerSprite.y, 20, 20, 'n');
 	gunSprite.color = 'green'
@@ -73,6 +83,7 @@ function scoreUp() {
 
 bulletAngle = 0
 
+playerHealth = 3
 
 
 /*******************************************************/
@@ -83,6 +94,7 @@ function draw() {
 
 	text("rooms cleared: " + roomScore, 50, 50)
 	text("targets left: " + targetGroup.length, 50, 75)
+	text("health: " + playerHealth, 50, 100)
 
 
 	/*******************************************************/
@@ -123,10 +135,10 @@ function draw() {
 
 	}
 	//bulletSprite.moveTowards(playerSprite.x, playerSprite.y, 1);
-	if (bulletGroup.overlaps(wallGroup, func2Call)) { }
+	if (bulletGroup.overlaps(wallGroup, bulletWallColide)) { }
 	if (bulletGroup.overlaps(targetGroup, murder)) { }
 
-	function func2Call(bulletSprite, wallGroup) {
+	function bulletWallColide(bulletSprite, wallGroup) {
 		console.log("bullet colided")
 		bulletSprite.remove();
 	}
@@ -137,12 +149,22 @@ function draw() {
 		targetSprite.remove()
 	}
 
+	/*******************************************************/
+	// player health
+	/*******************************************************/
+	if(playerSprite.collides(targetSprite, damagePlayer)) { }
+
+	function damagePlayer() {
+		playerHealth -= 1
+		targetSprite.remove()
+	}
+
 
 	/*******************************************************/
 	// levelchange
 	/*******************************************************/
 	if (playerSprite.overlaps(exitDoor) && targetGroup.length < 1) {
-		scoreUp()
+		scoreUp();
 		playerSprite.moveTo(550, 850, 10000);
 
 		//targetGroup.visible = false
@@ -150,7 +172,7 @@ function draw() {
 
 		if (roomType = 1) {
 			background('ccc');
-			roomOne()
+			roomOne();
 			//roomType = random(2, 3)
 		}
 
@@ -159,7 +181,7 @@ function draw() {
 			wallGroup.add(wallCenter);
 		}
 
-		setTimeout(1000)
+		setTimeout(1000);
 	} else if (playerSprite.overlapping(exitDoor) && targetGroup.length > 0) {
 
 		text("oops! you need to destroy all the targets before progressing!", width / 2, height / 2);
