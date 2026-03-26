@@ -22,7 +22,7 @@ function setup() {
 	/*******************************************************/
 	// FOR LOOP START
 	for (let i = 0; i < 80; i++) {
-		targetSprite = new Sprite(random(500), random(200), 20, 20);
+		targetSprite = new Sprite(random(900), random(200), 20, 20);
 		targetGroup.add(targetSprite)
 	}
 	// FOR LOOP END
@@ -152,12 +152,14 @@ function draw() {
 	/*******************************************************/
 	// player health
 	/*******************************************************/
-	if(playerSprite.collides(targetSprite, damagePlayer)) { }
+	if(playerSprite.collides(targetGroup, damagePlayer)) { }
 
-	function damagePlayer() {
+	function damagePlayer(playerSprite, targetSprite) {
 		playerHealth -= 1
 		targetSprite.remove()
 	}
+
+	targetGroup.moveTo(playerSprite.x, playerSprite.y, 1);
 
 
 	/*******************************************************/

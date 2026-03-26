@@ -21,22 +21,24 @@ function setup() {
 function draw() {
     background('ccc');
 
-    if (gameState === "menu") {
+    if (gameState = "menu") {
         drawMenu();
-    } else if (gameState === "play") {
+    } else if (gameState = "playStart") {
+        drawGameStart();
+    } else if (gameState = "play") {
         drawGame();
-    } else if (gameState === "gameover") {
+    } else if (gameState = "gameover") {
         drawGameOver();
     }
 
     function drawMenu() {
         text("press enter to start game", 100, 100)
-         if (kb.pressed('space')) {
-            gameState === "play"
+        if (kb.pressed('space')) {
+            gameState = "playStart";
         }
     }
 
-    function drawGame() {
+    function drawGameStart() {
 
         //player
         playerSprite = new Sprite(width / 2, height - 100, 40, 'd');
@@ -92,6 +94,7 @@ function draw() {
 
         wallGroup.add(wallBottom);
 
+        gameState = "play"
     }
 
     function scoreUp() {
@@ -102,7 +105,7 @@ function draw() {
     bulletAngle = 0
 }
 
-function drawGameRoom1() {
+function drawGame() {
 
     background('ccc');
 
