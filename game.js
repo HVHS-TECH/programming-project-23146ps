@@ -14,19 +14,12 @@ function setup() {
 	playerSprite = new Sprite(width / 2, height - 100, 40, 'd');
 	playerSprite.color = 'blue'
 	
-
+	targets = [];
 	targetGroup = new Group();
-
-
-
-	/*******************************************************/
-	// FOR LOOP START
-	for (let i = 0; i < 80; i++) {
-		targetSprite = new Sprite(random(900), random(200), 20, 20);
-		targetGroup.add(targetSprite)
+	for (let i = 0; i < 40; i++) {
+		targets[i] = new Sprite(random(width), random(height), 40, 40);
+		targetGroup.add(targets[i]);
 	}
-	// FOR LOOP END
-	/*******************************************************/
 
 
 
@@ -159,7 +152,10 @@ function draw() {
 		targetSprite.remove()
 	}
 
-	targetGroup.moveTo(playerSprite.x, playerSprite.y, 1);
+	for (let i = 0; i < 40; i++) {
+		targets[i].moveTo(playerSprite.x, playerSprite.y, 1);
+	}
+
 
 
 	/*******************************************************/
@@ -175,12 +171,29 @@ function draw() {
 		if (roomType = 1) {
 			background('ccc');
 			roomOne();
-			//roomType = random(2, 3)
+			roomType = random(2, 3)
+			console.log("room 1")
+		} else if (roomType = 2) {
+			background('ccc');
+			roomTwo();
+			roomType = random(1 || 3)
+			console.log("room 2")
+		} else if (roomType = 3) {
+			background('ccc');
+			roomThree();
+			roomType = random(1, 2)
 		}
 
 		function roomOne() {
 			wallCenter = new Sprite(width / 2, height / 2, 400, 50, 's');
 			wallGroup.add(wallCenter);
+		}
+
+		function roomTwo() {
+			wallMidLeft = new Sprite(0, height / 2, 600, 50, 's');
+			wallGroup.add(wallMidLeft);
+			wallMidRight = new Sprite(width, height / 2, 600, 50, 's');
+			wallGroup.add(wallMidRight);
 		}
 
 		setTimeout(1000);
