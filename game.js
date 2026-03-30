@@ -14,14 +14,7 @@ function setup() {
 	playerSprite = new Sprite(width / 2, height - 100, 40, 'd');
 	playerSprite.color = 'blue'
 	
-	targets = [];
-	targetGroup = new Group();
-	for (let i = 0; i < 40; i++) {
-		targets[i] = new Sprite(random(width), random(height), 40, 40);
-		targetGroup.add(targets[i]);
-	}
-
-
+	targetLoad();
 
 	gunSprite = new Sprite(playerSprite.x, playerSprite.y, 20, 20, 'n');
 	gunSprite.color = 'green'
@@ -67,11 +60,46 @@ function setup() {
 
 	wallGroup.add(wallBottom);
 
+/*
+	//room 1
+	wallCenter = new Sprite(width / 2, height / 2, 400, 50, 'n');
+	wallCenter.visible = false
+	wallGroup.add(wallCenter);
+
+	//room 2
+	wallMidLeft = new Sprite(0, height / 2, 600, 50, 'n');
+	wallMidLeft.visible = false
+	wallGroup.add(wallMidLeft);
+	wallMidRight = new Sprite(width, height / 2, 600, 50, 'n');
+	wallMidRight.visible = false
+	wallGroup.add(wallMidRight);
+
+
+	//room 3
+	wallCenter1 = new Sprite(width / 2, 300, 200, 50, 'n');
+	wallCenter1.visible = false
+	wallGroup.add(wallCenter1);
+	wallCenter2 = new Sprite(width / 2, 600, 200, 50, 'n');
+	wallCenter2.visible = false
+	wallGroup.add(wallCenter2);
+*/
 }
 
 function scoreUp() {
 	roomScore += 1
 	console.log("room cleared!!");
+}
+
+function targetLoad() {
+	targets = [];
+	targetGroup = new Group();
+	for (let i = 0; i < 40; i++) {
+		targets[i] = new Sprite(random(width), random(200), 40, 40);
+		targetGroup.add(targets[i]);
+	}
+}
+
+function playerDies() {
 }
 
 bulletAngle = 0
@@ -152,6 +180,14 @@ function draw() {
 		targetSprite.remove()
 	}
 
+	if(playerHealth < 1) {
+		playerDies()
+	}
+
+
+	/*******************************************************/
+	// enemy movement
+	/*******************************************************/
 	for (let i = 0; i < 40; i++) {
 		targets[i].moveTo(playerSprite.x, playerSprite.y, 1);
 	}
@@ -163,11 +199,15 @@ function draw() {
 	/*******************************************************/
 	if (playerSprite.overlaps(exitDoor) && targetGroup.length < 1) {
 		scoreUp();
+		targetLoad();
 		playerSprite.moveTo(550, 850, 10000);
+
+
 
 		//targetGroup.visible = false
 		//targetGroup.physicsType = none
 
+		/*
 		if (roomType = 1) {
 			background('ccc');
 			roomOne();
@@ -185,16 +225,47 @@ function draw() {
 		}
 
 		function roomOne() {
-			wallCenter = new Sprite(width / 2, height / 2, 400, 50, 's');
-			wallGroup.add(wallCenter);
+			wallMidLeft.visible = false
+			wallMidLeft.physicsType = 'n'
+			wallMidRight.visible = false
+			wallMidRight.physicsType = 'n'
+			wallCenter1.visible = false
+			wallCenter1.physicsType = 'n'
+			wallCenter2.visible = false
+			wallCenter2.physicsType = 'n'
+
+			wallCenter.visible = true
+			wallCenter.physicsType = 's'
 		}
 
 		function roomTwo() {
-			wallMidLeft = new Sprite(0, height / 2, 600, 50, 's');
-			wallGroup.add(wallMidLeft);
-			wallMidRight = new Sprite(width, height / 2, 600, 50, 's');
-			wallGroup.add(wallMidRight);
+			wallCenter.visible = false
+			wallCenter.physicsType = 'n'
+			wallCenter1.visible = false
+			wallCenter1.physicsType = 'n'
+			wallCenter2.visible = false
+			wallCenter2.physicsType = 'n'
+
+			wallMidLeft.visible = true
+			wallMidLeft.physicsType = 's'
+			wallMidRight.visible = true
+			wallMidRight.physicsType = 's'
 		}
+
+		function roomThree() {
+			wallMidLeft.visible = false
+			wallMidLeft.physicsType = 'n'
+			wallMidRight.visible = false
+			wallMidRight.physicsType = 'n'
+			wallCenter.visible = false
+			wallCenter.physicsType = 'n'
+
+			wallCenter1.visible = true
+			wallCenter1.physicsType = 's'
+			wallCenter2.visible = true
+			wallCenter2.physicsType = 's'
+		}
+			*/
 
 		setTimeout(1000);
 	} else if (playerSprite.overlapping(exitDoor) && targetGroup.length > 0) {

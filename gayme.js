@@ -7,12 +7,10 @@
 /*******************************************************/
 // setup()
 /*******************************************************/
-let gameState = "menu";
-
 function setup() {
     console.log("setup: ");
     cnv = new Canvas(1100, 900);
-
+    gameState = "menu";
 }
 
 /*******************************************************/
@@ -23,8 +21,10 @@ function draw() {
 
     if (gameState = "menu") {
         drawMenu();
+        console.log("menu loaded")
     } else if (gameState = "playStart") {
         drawGameStart();
+        console.log("game started2")
     } else if (gameState = "play") {
         drawGame();
     } else if (gameState = "gameover") {
@@ -34,7 +34,8 @@ function draw() {
     function drawMenu() {
         text("press enter to start game", 100, 100)
         if (kb.pressed('space')) {
-            gameState = "playStart";
+            gameState = "playStart"
+            console.log("game started")
         }
     }
 
@@ -103,98 +104,94 @@ function draw() {
     }
 
     bulletAngle = 0
-}
 
-function drawGame() {
+    function drawGame() {
 
-    background('ccc');
+        background('ccc');
 
-    text("rooms cleared: " + roomScore, 50, 50)
-    text("targets left: " + targetGroup.length, 50, 75)
-
-
-    /*******************************************************/
-    // player movement
-    /*******************************************************/
-    if (kb.pressing('a')) {
-        playerSprite.vel.x = -4;
-    } else if (kb.pressing('d')) {
-        playerSprite.vel.x = 4;
-    } else {
-        playerSprite.vel.x = 0;
-    }
-
-    if (kb.pressing('w')) {
-        playerSprite.vel.y = -4;
-    } else if (kb.pressing('s')) {
-        playerSprite.vel.y = 4;
-    } else {
-        playerSprite.vel.y = 0;
-    }
+        text("rooms cleared: " + roomScore, 50, 50)
+        text("targets left: " + targetGroup.length, 50, 75)
 
 
-    /*******************************************************/
-    // shooting killing
-    /*******************************************************/
-    gunSprite.moveTowards(playerSprite.x, playerSprite.y, 1);
-    //gunSprite.moveTowards(mouseX, mouseY, 60);
-
-    if (kb.pressed('space')) {
-
-        bulletSprite = new Sprite(gunSprite.x, gunSprite.y, 10, 'n');
-
-        bulletSprite.direction = playerSprite.angleTo(mouseX, mouseY)
-
-        bulletSprite.speed = 15;
-
-        bulletGroup.add(bulletSprite);
-
-    }
-    //bulletSprite.moveTowards(playerSprite.x, playerSprite.y, 1);
-    if (bulletGroup.overlaps(wallGroup, bulletWallColide)) { }
-    if (bulletGroup.overlaps(targetGroup, murder)) { }
-
-    function bulletWallColide(bulletSprite, wallGroup) {
-        console.log("bullet colided")
-        bulletSprite.remove();
-    }
-
-    function murder(bulletSprite, targetSprite) {
-        console.log("kill")
-        bulletSprite.remove()
-        targetSprite.remove()
-    }
-
-
-    /*******************************************************/
-    // levelchange
-    /*******************************************************/
-    if (playerSprite.overlaps(exitDoor) && targetGroup.length < 1) {
-        scoreUp();
-        playerSprite.moveTo(550, 850, 10000);
-
-        //targetGroup.visible = false
-        //targetGroup.physicsType = none
-
-        if (roomType = 1) {
-            background('ccc');
-            roomOne();
-            //roomType = random(2, 3)
+        /*******************************************************/
+        // player movement
+        /*******************************************************/
+        if (kb.pressing('a')) {
+            playerSprite.vel.x = -4;
+        } else if (kb.pressing('d')) {
+            playerSprite.vel.x = 4;
+        } else {
+            playerSprite.vel.x = 0;
         }
 
-        function roomOne() {
-            wallCenter = new Sprite(width / 2, height / 2, 400, 50, 's');
-            wallGroup.add(wallCenter);
+        if (kb.pressing('w')) {
+            playerSprite.vel.y = -4;
+        } else if (kb.pressing('s')) {
+            playerSprite.vel.y = 4;
+        } else {
+            playerSprite.vel.y = 0;
         }
 
-        setTimeout(1000);
-    } else if (playerSprite.overlapping(exitDoor) && targetGroup.length > 0) {
 
-        text("oops! you need to destroy all the targets before progressing!", width / 2, height / 2);
+        /*******************************************************/
+        // shooting killing
+        /*******************************************************/
+        gunSprite.moveTowards(playerSprite.x, playerSprite.y, 1);
+        //gunSprite.moveTowards(mouseX, mouseY, 60);
+
+        if (kb.pressed('space')) {
+
+            bulletSprite = new Sprite(gunSprite.x, gunSprite.y, 10, 'n');
+
+            bulletSprite.direction = playerSprite.angleTo(mouseX, mouseY)
+
+            bulletSprite.speed = 15;
+
+            bulletGroup.add(bulletSprite);
+
+        }
+        //bulletSprite.moveTowards(playerSprite.x, playerSprite.y, 1);
+        if (bulletGroup.overlaps(wallGroup, bulletWallColide)) { }
+        if (bulletGroup.overlaps(targetGroup, murder)) { }
+
+        function bulletWallColide(bulletSprite, wallGroup) {
+            console.log("bullet colided")
+            bulletSprite.remove();
+        }
+
+        function murder(bulletSprite, targetSprite) {
+            console.log("kill")
+            bulletSprite.remove()
+            targetSprite.remove()
+        }
+
+
+        /*******************************************************/
+        // levelchange
+        /*******************************************************/
+        if (playerSprite.overlaps(exitDoor) && targetGroup.length < 1) {
+            scoreUp();
+            playerSprite.moveTo(550, 850, 10000);
+
+            //targetGroup.visible = false
+            //targetGroup.physicsType = none
+
+            if (roomType = 1) {
+                background('ccc');
+                roomOne();
+                //roomType = random(2, 3)
+            }
+
+            function roomOne() {
+                wallCenter = new Sprite(width / 2, height / 2, 400, 50, 's');
+                wallGroup.add(wallCenter);
+            }
+
+            setTimeout(1000);
+        } else if (playerSprite.overlapping(exitDoor) && targetGroup.length > 0) {
+
+            text("oops! you need to destroy all the targets before progressing!", width / 2, height / 2);
+        }
     }
 }
 
-
-/*******************************************************/
-//  END OF APP
-/*******************************************************/
