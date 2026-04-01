@@ -103,6 +103,7 @@ function targetLoad() {
 	targetGroup = new Group();
 	for (let i = 0; i < 10 + roomScore; i++) {
 		targets[i] = new Sprite(random(width), random(300), 40, 40);
+		targets[i].color = 'red'
 		targetGroup.add(targets[i]);
 	}
 }
@@ -173,6 +174,8 @@ function draw() {
 	if (kb.pressed('space')) {
 
 		bulletSprite = new Sprite(gunSprite.x, gunSprite.y, 10, 'n');
+
+		bulletSprite.color = 'grey'
 
 		bulletSprite.direction = playerSprite.angleTo(mouseX, mouseY);
 
