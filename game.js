@@ -21,7 +21,7 @@ function setup() {
 	gunSprite = new Sprite(playerSprite.x, playerSprite.y, 20, 20, 'n');
 	gunSprite.color = 'green'
 
-	//bulletSprite = new Sprite(playerSprite.x, playerSprite.y, 10, 'n')
+	//bulletSprite = new Sprite(playerSprite.x, playerSprite.y, 10, 'n');
 	//bulletSprite.color = 'red'
 
 	bulletGroup = new Group();
@@ -86,21 +86,27 @@ function setup() {
 
 	wallGroup.add(exitDoor);
 }
+
+
+
 roomScore = 0
+
 
 function scoreUp() {
 	roomScore += 1
 	console.log("room cleared!!");
 }
 
+
 function targetLoad() {
 	targets = [];
 	targetGroup = new Group();
-	for (let i = 0; i < 40 + roomScore; i++) {
-		targets[i] = new Sprite(random(width), random(200), 40, 40);
+	for (let i = 0; i < 10 + roomScore; i++) {
+		targets[i] = new Sprite(random(width), random(300), 40, 40);
 		targetGroup.add(targets[i]);
 	}
 }
+
 
 function playerDies() {
 	background('red');
@@ -108,13 +114,15 @@ function playerDies() {
 	targetGroup.visible = false
 	playerSprite.visible = false
 	gunSprite.visible = false
-	bulletSprite.visible = false
+	bulletGroup.visible = false
 	wallGroup.visible = false
 
 	noLoop();
 }
 
+
 bulletAngle = 0
+
 
 playerHealth = 3
 
@@ -125,9 +133,9 @@ playerHealth = 3
 function draw() {
 	background('ccc');
 
-	text("rooms cleared: " + roomScore, 50, 50)
-	text("targets left: " + targetGroup.length, 50, 75)
-	text("health: " + playerHealth, 50, 100)
+	text("rooms cleared: " + roomScore, 50, 50);
+	text("targets left: " + targetGroup.length, 50, 75);
+	text("health: " + playerHealth, 50, 100);
 
 	/*******************************************************/
 	// restart game
@@ -166,7 +174,7 @@ function draw() {
 
 		bulletSprite = new Sprite(gunSprite.x, gunSprite.y, 10, 'n');
 
-		bulletSprite.direction = playerSprite.angleTo(mouseX, mouseY)
+		bulletSprite.direction = playerSprite.angleTo(mouseX, mouseY);
 
 		bulletSprite.speed = 15;
 
@@ -178,14 +186,14 @@ function draw() {
 	if (bulletGroup.overlaps(targetGroup, murder)) { }
 
 	function bulletWallColide(bulletSprite, wallGroup) {
-		console.log("bullet colided")
+		console.log("bullet colided");
 		bulletSprite.remove();
 	}
 
 	function murder(bulletSprite, targetSprite) {
-		console.log("kill")
-		bulletSprite.remove()
-		targetSprite.remove()
+		console.log("kill");
+		bulletSprite.remove();
+		targetSprite.remove();
 	}
 
 	/*******************************************************/
@@ -194,29 +202,29 @@ function draw() {
 	if (playerSprite.collides(targetGroup, damagePlayer)) { }
 
 	function damagePlayer(playerSprite, targetSprite) {
-		playerHealth -= 1
-		targetSprite.remove()
+		playerHealth -= 1;
+		targetSprite.remove();
 	}
 
 	if (playerHealth < 1) {
-		playerDies()
+		playerDies();
 	}
 
 
 	/*******************************************************/
 	// enemy movement
 	/*******************************************************/
-	for (let i = 0; i < 40 + roomScore; i++) {
-		targets[i].moveTo(playerSprite.x, playerSprite.y, 1);
+	for (let i = 0; i < 10 + roomScore; i++) {
+		targets[i].moveTo(playerSprite.x, playerSprite.y, 2);
 	}
 
 	/*******************************************************/
 	// levelchange
 	/*******************************************************/
 	if (playerSprite.overlaps(exitDoor) && targetGroup.length < 1) {
-		playerSprite.physicsType = 'n'
+		playerSprite.physicsType = 'n';
 		playerSprite.moveTo(550, 850, 10000);
-		playerSprite.physicsType = 'd'
+		playerSprite.physicsType = 'd';
 		scoreUp();
 		targetLoad();
 
