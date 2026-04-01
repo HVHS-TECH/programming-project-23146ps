@@ -10,10 +10,12 @@ function setup() {
 	console.log("setup: ");
 	cnv = new Canvas(1100, 900);
 
-	//player
+	/*******************************************************/
+	// player sprite, gun sprite, bullet group, score
+	/*******************************************************/
 	playerSprite = new Sprite(width / 2, height - 100, 40, 'd');
 	playerSprite.color = 'blue'
-	
+
 	targetLoad();
 
 	gunSprite = new Sprite(playerSprite.x, playerSprite.y, 20, 20, 'n');
@@ -23,22 +25,14 @@ function setup() {
 	//bulletSprite.color = 'red'
 
 	bulletGroup = new Group();
-
-	roomScore = 0
-
 	//let roomType = 0
 
+	/*******************************************************/
+	// walls
+	/*******************************************************/
+	//roomType = 1
+
 	wallGroup = new Group();
-
-	//door
-	exitDoor = new Sprite(width / 2, 0, 100, 30, 'n');
-	exitDoor.color = 'orange'
-
-	wallGroup.add(exitDoor);
-
-	//walls
-
-	roomType = 1
 
 	wallLeft = new Sprite(0, height / 2, 8, height, 's');
 	wallLeft.color = 'black';
@@ -60,30 +54,39 @@ function setup() {
 
 	wallGroup.add(wallBottom);
 
-/*
-	//room 1
-	wallCenter = new Sprite(width / 2, height / 2, 400, 50, 'n');
-	wallCenter.visible = false
-	wallGroup.add(wallCenter);
+	/*
+		//room 1
+		wallCenter = new Sprite(width / 2, height / 2, 400, 50, 'n');
+		wallCenter.visible = false
+		wallGroup.add(wallCenter);
+	
+		//room 2
+		wallMidLeft = new Sprite(0, height / 2, 600, 50, 'n');
+		wallMidLeft.visible = false
+		wallGroup.add(wallMidLeft);
+		wallMidRight = new Sprite(width, height / 2, 600, 50, 'n');
+		wallMidRight.visible = false
+		wallGroup.add(wallMidRight);
+	
+	
+		//room 3
+		wallCenter1 = new Sprite(width / 2, 300, 200, 50, 'n');
+		wallCenter1.visible = false
+		wallGroup.add(wallCenter1);
+		wallCenter2 = new Sprite(width / 2, 600, 200, 50, 'n');
+		wallCenter2.visible = false
+		wallGroup.add(wallCenter2);
+	*/
 
-	//room 2
-	wallMidLeft = new Sprite(0, height / 2, 600, 50, 'n');
-	wallMidLeft.visible = false
-	wallGroup.add(wallMidLeft);
-	wallMidRight = new Sprite(width, height / 2, 600, 50, 'n');
-	wallMidRight.visible = false
-	wallGroup.add(wallMidRight);
+	/*******************************************************/
+	// exit
+	/*******************************************************/
+	exitDoor = new Sprite(width / 2, 0, 100, 30, 'n');
+	exitDoor.color = 'orange'
 
-
-	//room 3
-	wallCenter1 = new Sprite(width / 2, 300, 200, 50, 'n');
-	wallCenter1.visible = false
-	wallGroup.add(wallCenter1);
-	wallCenter2 = new Sprite(width / 2, 600, 200, 50, 'n');
-	wallCenter2.visible = false
-	wallGroup.add(wallCenter2);
-*/
+	wallGroup.add(exitDoor);
 }
+roomScore = 0
 
 function scoreUp() {
 	roomScore += 1
@@ -93,13 +96,22 @@ function scoreUp() {
 function targetLoad() {
 	targets = [];
 	targetGroup = new Group();
-	for (let i = 0; i < 40; i++) {
+	for (let i = 0; i < 40 + roomScore; i++) {
 		targets[i] = new Sprite(random(width), random(200), 40, 40);
 		targetGroup.add(targets[i]);
 	}
 }
 
 function playerDies() {
+	background('red');
+	text("you died! you cleared " + roomScore + " rooms! press 'r' or reload the page to restart!!", width / 2, height / 2)
+	targetGroup.visible = false
+	playerSprite.visible = false
+	gunSprite.visible = false
+	bulletSprite.visible = false
+	wallGroup.visible = false
+
+	noLoop();
 }
 
 bulletAngle = 0
@@ -117,6 +129,12 @@ function draw() {
 	text("targets left: " + targetGroup.length, 50, 75)
 	text("health: " + playerHealth, 50, 100)
 
+	/*******************************************************/
+	// restart game
+	/*******************************************************/
+	if (kb.pressed('r')) {
+		location.reload();
+	}
 
 	/*******************************************************/
 	// player movement
@@ -139,7 +157,7 @@ function draw() {
 
 
 	/*******************************************************/
-	// shooting killing
+	// shooting and killing
 	/*******************************************************/
 	gunSprite.moveTowards(playerSprite.x, playerSprite.y, 1);
 	//gunSprite.moveTowards(mouseX, mouseY, 60);
@@ -171,16 +189,16 @@ function draw() {
 	}
 
 	/*******************************************************/
-	// player health
+	// player health and death
 	/*******************************************************/
-	if(playerSprite.collides(targetGroup, damagePlayer)) { }
+	if (playerSprite.collides(targetGroup, damagePlayer)) { }
 
 	function damagePlayer(playerSprite, targetSprite) {
 		playerHealth -= 1
 		targetSprite.remove()
 	}
 
-	if(playerHealth < 1) {
+	if (playerHealth < 1) {
 		playerDies()
 	}
 
@@ -188,19 +206,19 @@ function draw() {
 	/*******************************************************/
 	// enemy movement
 	/*******************************************************/
-	for (let i = 0; i < 40; i++) {
+	for (let i = 0; i < 40 + roomScore; i++) {
 		targets[i].moveTo(playerSprite.x, playerSprite.y, 1);
 	}
-
-
 
 	/*******************************************************/
 	// levelchange
 	/*******************************************************/
 	if (playerSprite.overlaps(exitDoor) && targetGroup.length < 1) {
+		playerSprite.physicsType = 'n'
+		playerSprite.moveTo(550, 850, 10000);
+		playerSprite.physicsType = 'd'
 		scoreUp();
 		targetLoad();
-		playerSprite.moveTo(550, 850, 10000);
 
 
 
@@ -273,7 +291,6 @@ function draw() {
 		text("oops! you need to destroy all the targets before progressing!", width / 2, height / 2);
 	}
 }
-
 /*******************************************************/
 //  END OF APP
 /*******************************************************/
